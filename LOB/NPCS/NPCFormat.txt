@@ -1,0 +1,83 @@
+//THIS IS YOUR NEW NPC. BE SURE TO REPLACE NPC 
+//WITH THE CORRECT NAME OF YOUR NPC.
+//------------------------------------------------------------
+
+
+//self explanatory
+//--
+$nodeColor["NPC","headskin"] = "1 0.870588 0.678431 1.000000";
+$nodeColor["NPC","chest"] = "0.501961 0.000000 0.000000 1.000000";
+$nodeColor["NPC","pants"] = "0.392157 0.192157 0.000000 1.000000";
+$nodeColor["NPC","larm"] = "0.501961 0.000000 0.000000 1.000000";
+$nodeColor["NPC","rarm"] = "0.501961 0.000000 0.000000 1.000000";
+$nodeColor["NPC","lhand"] = "1 0.870588 0.678431 1.000000";
+$nodeColor["NPC","rhand"] = "1 0.870588 0.678431 1.000000";
+$nodeColor["NPC","lshoe"] = "0.501961 0.000000 0.000000 1.000000";
+$nodeColor["NPC","rshoe"] = $nodeColor["NPC","lshoe"];
+$nodeColor["NPC","pack"] = $nodeColor["NPC","pants"];
+$pack["NPC"] = "pack";
+$smiley["NPC"] = "smileyevil1";
+$decal["NPC"] = "knight";
+$lob::vision["NPC"] = 10;
+//--
+
+//function the npc will use
+$task["NPC"] = "roam";
+
+//for some task, there is an inner task
+//$taskInner["NPC"] = "iron";
+
+//if we click the npc, are they ready for dialogue?
+$OnClickActionSet["NPC"] = "1";
+
+//roam range
+$roam["NPC"] = 5;
+
+//item to be heald
+$equip["NPC"] = "bronzeAxeImage";
+
+//datablock
+$LOB::NPC["NPC","Datablock"] = playerStandardArmor;
+
+//Stuff they say that users can see above the NPC's head
+//--
+$lob::roamMsgCount["NPC"] = -1;
+$lob::roamMsg["NPC",$lob::roamMsgCount["NPC"]++] = "Greetings adventurer, I have some useful information for you.";
+$lob::roamMsg["NPC",$lob::roamMsgCount["NPC"]++] = "Hey you, come over here.";
+$lob::roamMsg["NPC",$lob::roamMsgCount["NPC"]++] = "I have something I need you to do.";
+$lob::roamMsgCount++;
+//--
+
+while(isObject(NPC))NPC.delete();
+
+//SO
+new scriptObject(NPC);
+NPC.quest1 = "NPCs Payback";
+NPC.quest2 = "NPCs Plight";
+
+function NPC::onObjectSpawned(%this,%npc)
+{
+	//callback for when they first spawn
+	
+	//nothing
+}
+
+function NPC::onClick(%this,%ai,%player)
+{
+	if(%player.client.slo.hasGui $= "")
+	{
+		lob_playerNeedsGui(%player.client);
+		return false;
+	}
+	
+	%client = %player.client;
+	%slo = %client.slo;
+	
+	%m = "I'm busy.";
+
+	if(!%client.slo.hasGui)
+	{
+		commandToClient(%client,'messageBoxOk',"Attention","You'll need the client to talk to NPCS.");
+		return false;
+	}
+}	

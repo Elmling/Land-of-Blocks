@@ -1,0 +1,13 @@
+$LOB::Enemy["Worm","Health"] = 20;
+$LOB::Enemy["Worm","Level"] = "1 4";
+$LOB::Enemy["Worm","Datablock"] = Caterpillar;
+$LOB::Enemy["Worm","Aggressive"] = 0;
+$LOB::Enemy["Worm","Health"] = 25;
+$LOB::Enemy["Worm","RespawnTime"] = 20000;
+$drop["worm","gold"] = "0 5";
+$roam["Worm"] = 10;
+$task["Worm"] = "Combat";
+$equip["Worm"] = "bronzeShortSwordImage";
+$drop["worm","food"] = "raw beef";
+$foodDropChance["worm"] = 2;
+$lob::vision["worm"] = 15;

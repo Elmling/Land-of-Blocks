@@ -1,0 +1,72 @@
+//THIS IS YOUR NEW ENEMY. BE SURE TO REPLACE ENEMYNAME 
+//WITH THE CORRECT NAME OF YOUR ENEMY.
+//------------------------------------------------------------
+
+
+//Avatar Data
+//------------------------------------------------------------
+$nodeColor["ENEMYNAME","headskin"] = "0.500 0.500 0.500 1.000 1";
+$nodeColor["ENEMYNAME","pants"] = "0.0784314 0.0784314 0.0784314 1 1";
+$nodeColor["ENEMYNAME","larm"] = "0.0784314 0.0784314 0.0784314 1 1";
+$nodeColor["ENEMYNAME","lhand"] = "0.392157 0.196078 0 1 1";
+$nodeColor["ENEMYNAME","lshoe"] = "0.392157 0.196078 0 1 1";
+$nodeColor["ENEMYNAME","pack"] = "0.392157 0.196078 0 1 1";
+$nodeColor["ENEMYNAME","rarm"] = "0.0784314 0.0784314 0.0784314 1 1";
+$nodeColor["ENEMYNAME","rhand"] = "0.392157 0.196078 0 1 1";
+$nodeColor["ENEMYNAME","rshoe"] = "0.392157 0.196078 0 1 1";
+$nodeColor["ENEMYNAME","chest"] = "0.0784314 0.0784314 0.0784314 1 1";
+$decal["ENEMYNAME"] = "LinkTunic";
+$smiley["ENEMYNAME"] = "asciiTerror";
+//--------------------------------------------------------------
+
+//Enemy's total health
+$LOB::Enemy["ENEMYNAME","Health"] = 150;
+//Enemy's Level range
+$LOB::Enemy["ENEMYNAME","Level"] = "20 40";
+//Enemy's datablock
+$LOB::Enemy["ENEMYNAME","Datablock"] = playerStandardArmor;
+//Enemy is aggresive or not?
+$LOB::Enemy["ENEMYNAME","Aggressive"] = 1;
+//Enemy's respawn time when killed
+$LOB::Enemy["ENEMYNAME","RespawnTime"] = 20000;
+//Enemy's roam distance
+$roam["ENEMYNAME"] = 30;
+//Enemy's task, view the NPC.cs file
+$task["ENEMYNAME"] = "Combat";
+//Enemy's weapon they will hold/use
+$equip["ENEMYNAME"] = "mithrilShortSwordImage";
+//Enemy drops gold in a range of x to y
+$drop["ENEMYNAME","gold"] = "0 80";
+//Enemy drops this item when killed with the drop chance specified
+//----------------------------------------------------------------
+$drop["ENEMYNAME","item"] = "adamantiteShortsword";
+$itemDropChance["ENEMYNAME"] = 30;
+//----------------------------------------------------------------
+//Enemy drops this material when killed with the drop chance specified
+//----------------------------------------------------------------
+$drop["ENEMYNAME","material"] = "Whitestone Scroll";
+$materialDropChance["ENEMYNAME"] = 7;
+//----------------------------------------------------------------
+//Enemy drops this food type when killed with the drop chance specified
+//----------------------------------------------------------------
+$drop["ENEMYNAME","food"] = "Raw Lobster";
+$foodDropChance["ENEMYNAME"] = 3;
+//----------------------------------------------------------------
+//View and vision are the same, but both need to be specified
+//----------------------------------------------------------------
+$view["ENEMYNAME"] = 15;
+$vision["ENEMYNAME"] = 15;
+//----------------------------------------------------------------
+
+
+
+if(isObject(ENEMYNAME))ENEMYNAME.delete();
+
+new scriptObject(ENEMYNAME);
+//This function gets called when the object is created
+function ENEMYNAME::onObjectSpawned(%this,%ENEMYNAME)
+{
+	//Example:
+	//%ENEMYNAME.setScale("2 2 2");
+	//%ENEMYNAME.setmovespeed("0.5");
+}
