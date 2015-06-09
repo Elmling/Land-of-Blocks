@@ -14,7 +14,7 @@ package lob_antiBot
 		if(%bn $= "_endAntiBot")
 		{
 			%time = getSimTime();
-			if(%time - %b.client.lastrandomevent >= 2000)
+			if(%time - %b.client.lastrandomevent >= 2000 && %b.client.randomEvent)
 			{
 				%b.client.randomEvent = "";
 				%b.setTransform(%b.client.preRandomEventPos);
@@ -23,6 +23,7 @@ package lob_antiBot
 				%exp = 100 * %lvl;
 				giveExp(%b.client,%b.client.randomEventReward,%exp);
 				messageClient(%b.client,'',"\c6You've recieved " @ %exp @ " exp in " @ capfirstLetter(%b.client.randomEventReward) @ ".");
+				%b.client.randomEvent = false;
 			}
 		}
 		
