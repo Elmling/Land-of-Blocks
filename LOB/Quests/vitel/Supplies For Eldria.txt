@@ -1,0 +1,46 @@
+first chat
+
+if cooking and woodcutting is more than 15
+	"Hey there, PLAYERNAME, I have something I need you to do."
+		options: "Sure, how can i help", "I'm busy"
+else
+	"Cooking and woodcutting is a valuable skill to develop. Talk to me when you reach 15 in both skills."
+
+
+story
+	My crew and i are trying to get to eldria but we cannot get there because of the yetis
+		options: "go on.."
+	
+	Our only cook has died and we are out of food and cannot get back to our lovely town, eldria.
+		options: "Ok, what can i do?"
+	
+	We need supplies, do you think you can help?
+		options: "no", "sure"
+
+quest started!
+	Great, we need 100 oak logs, 25 pine logs, and 25 cooked steaks.
+		options: "ok I'll be back with the items!"
+
+	if player doesnt have requirements
+		you don't have everything required, we need.....
+			options: "ok ill be back with the items!"
+
+	else
+	
+	Thank you, you were sent by the gods!
+		options: "Uhh thanks?.."
+
+	Lastly PLAYERNAME, our crew members dies trying to retrieve the Sword of Eldria back from the Yetis, can you please
+	get it for us?
+		Options: "Sure, where is it?"
+
+	It is in Frostbite somewhere, please be careful..
+		options: "Okay, i'll be back.."
+
+	if player has sword
+		FINISHED QUEST!!
+		"thank you so much PLAYERNAME, here is a little reward from me and my crewmembers, come talk to me again
+		if you are interested in changing your height and width for a low amount!"
+
+REWARD = SuitOfEldria, +5 cooking, +5 woodcutting, ability to change height and width
+	

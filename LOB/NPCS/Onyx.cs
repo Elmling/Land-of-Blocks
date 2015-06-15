@@ -63,4 +63,6 @@ function onyx::onObjectSpawned(%this,%Onyx)
 {
 	%Onyx.setScale("2 2 2");
 	%Onyx.setmovespeed("0.5");
+	%onyx.removeTreeCollisionLoop();
 }
+

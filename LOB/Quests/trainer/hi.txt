@@ -1,0 +1,2 @@
+#CON (client).slo.trainerSaidHi_0 #CONEND #DIA Hey #DIAEND #ACT (client).slo.trainersaidhi_1 #ACTEND
+#CON (client).slo.trainerSaidhi_1 #CONEND #DIA You already said hi to me. #DIAEND #ACT NULL #ACTEND

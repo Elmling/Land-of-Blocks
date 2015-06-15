@@ -39,4 +39,7 @@ function Goblin::onObjectSpawned(%this,%npc)
 	%npc.setmovespeed(1.3);
 	%npc.setScale("1.5 1.5 1.5");
 	%npc.jumpForce = 16;
+	%npc.removeTreeCollisionLoop();
 }
+
+

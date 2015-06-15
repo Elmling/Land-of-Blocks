@@ -32,13 +32,52 @@ $equip["Dragon"] = "dragonbreathImage";
 
 if(isObject(Dragon))Dragon.delete();
 
-new scriptObject(Dragon);
+new scriptObject(Dragon)
+{
+		class="Dragon";
+};
 
 function dragon::onObjectSpawned(%this,%npc)
 {
-	%npc.setmovespeed(1.3);
+	%npc.setmovespeed(0.9);
 	%npc.setScale("1.5 1.5 1.5");
 	%npc.jumpForce = 15;
+	%this.removeTreeCollisionLoop(%npc);
+}
+
+function dragon::removeTreeCollisionLoop(%this,%npc)
+{
+	%npc.removeTreecollisionLoop();
+}
+
+function aiPlayer::removeTreeCollisionLoop(%npc)
+{
+	if(isObject(%npc))
+	{
+		cancel(%npc.TreeCollloop);
+		
+		%position = %npc.position;
+		InitContainerRadiusSearch(%position,25,$TypeMasks::FxBrickAlwaysObjectType);
+		while((%o=containerSearchNext()) !$= 0)
+		{
+			if(%o.getDataBlock().getName() $= "bricklargepinetreedata")
+			{
+					cancel(%o.sched);
+					if(!isEventPending(%o.sched))
+					{
+						%o.setColliding(0);
+						%o.sched = %o.schedule(1500,setColliding,1);
+					}
+					else
+					{
+							
+					}
+			}
+		}
+			
+			%npc.treeCollloop = %npc.schedule(1000,removeTreeCollisionLoop,%npc);
+	}
+	return false;
 }
 
 

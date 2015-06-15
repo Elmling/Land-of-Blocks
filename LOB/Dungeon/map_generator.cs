@@ -36,30 +36,91 @@ function map_generator::chooseStep(%this)
 	return %a[getRandom(0,3)];
 }
 
-function map_generator::spawnAi(%this,%position)
+
+
+function map_generator::spawnAi(%this)
 {
-	return false;
-	%w[0] = "submachinegunimage";
-	%w[1] = "pumpshotgunimage";
-	%w[2] = "pistolimage";
-	%w[3] = "TAssaultRifleimage";
-	%w[4] = "battlerifleimage";
-	%w[5] = "combatshotgunimage";
-	%w[6] = "magnumimage";
-	%c = 6;
-	%ai = new aiplayer()
+	%c = missionCleanup.getCount();
+	%enemyname[0] = "goblin";
+	%enemyName[1] = "bandit";
+	%enemyName[2] = "Ogre";
+	%enemyname[3] = "Onyx";
+	%enemyNameCount = 4;
+	%enemyName[0,"rare"] = "Dragon";
+	%enemyName[1,"rare"] = "coyote";
+	%enemyName[2,"rare"] = "yeti";
+	%enemyNameCountRare = 3;
+	for(%i=0;%i<%c;%i++)
 	{
-		position = %position;
-		dataBlock = playerStandardArmor;
-		scale = "1 1 " @ getRandom(1,2);
-		isSurvivalAi = true;
-	};
-	
-	%ai.mountImage(%w[getRandom(0,%c)],1);
-	%ai.playthread(1,"armReadyRight");
-	%ai.doroam();
-	
-	missionCleanup.add(%ai);
+		if(%i%10 != 0) continue;
+		%o = missionCleanup.getObject(%i);
+		
+		if(%o.isFloorBrick)
+		{		%p = %o.position;
+			if(getRandom(0,500) <= 40)
+			{
+				//%amount = getRandom(0,2);
+				%name = %enemyName[getRandom(0,%enemyNameCountRare-1),"rare"];
+			}
+			else
+			{
+				%name = %enemyName[getRandom(0,%enemyNameCount-1)];
+				//%amount = getRandom(0,2);
+			}
+			//messageClient($e,'',"name=  " @ %name);
+			%o.setName("_enemyspawn_dungeon_" @ %name);
+			%area = "dungeon";
+
+			%datablock = $LOB::Enemy[%name,"Datablock"];
+			
+			if(!isObject(%datablock))
+				return false;
+			
+			%ai = new aiPlayer()
+			{
+				dataBlock = $LOB::Enemy[%name,"Datablock"];
+				aggressive = $LOB::Enemy[%name,"Aggressive"];
+				health = $LOB::Enemy[%name,"Health"];
+				tempHealth = $LOB::Enemy[%name,"Health"];
+				position = vectorAdd(%p,getRandom(-5,5) SPC getRandom(-5,5) SPC "1.5");
+				name = %name;
+				Level = getRandom(getWord($LOB::Enemy[%name,"Level"],0),getWord($LOB::Enemy[%name,"Level"],1));
+				Aggressive = true;
+				isSurvivalAi = true;
+			};
+			%ai.brick = %o;
+			%ai.home = %o;
+			%ai.homebrick = %o;
+			newCombatDataFromLevel(%ai,%ai.level);
+			
+			if(%ai.name $= "dragon" || %ai.name $= "yeti" || %ai.name $= "worm" || %ai.name $= "coyote")
+			{
+					//nothing
+			}
+			else
+			if($nodeColor[%name,"chest"] $= "")
+				dressplayer(%ai,"citizen");
+			else
+				dressplayer(%ai,%name);
+				
+			if($equip[%name] !$= "")
+			{
+				equipPlayer(%ai,$equip[%name]);
+			}
+			
+			if($task[%name] !$= "custom")
+			{
+				if($task[%name] $= "")
+					%ai.schedule(200,roam);
+				else
+					eval("%ai.schedule(200,"@$task[%name]@");");
+			}
+				
+			if(isFunction(%ai.name,"onObjectSpawned"))
+				eval("" @ %ai.name @ ".onObjectSpawned(" @ %ai @ ");");
+			missionCleanup.add(%ai);
+		}
+	}
 }
 
 function map_generator::createWallBrick(%this,%position)
@@ -132,7 +193,7 @@ function map_generator::createFloorBrick(%this,%position)
 		map_generator = map_generator;
 		map_generator_step = map_generator.chooseStep();
 	};
-	
+	//map_Generator.dungeonBrick = %b;
 	$map_generator::plantArea::pos[%position] = true;
 	
 	%b.plant();
@@ -141,6 +202,11 @@ function map_generator::createFloorBrick(%this,%position)
 	brickGroup_35295.add(%b);
 	
 	missionCleanup.add(%b);
+	if(%this.brickForAi $= "")
+	{
+		%this.brickForAi = %b;	
+		%b.setName("_enemyName");
+	}
 }
 
 function map_generator::createTreeBrick(%this,%position)
@@ -290,6 +356,7 @@ function map_generator::generate(%this,%position,%step)
 }
 function map_generator::clearBricks(%this)
 {
+	map_generator.brickForAi = "";
 	%c=missionCleanup.getCount();
 	for(%i=%c;%i>=0;%i--)
 		if(isObject(%o=missioncleanup.getObject(%i)))
@@ -389,10 +456,21 @@ function map_generator::applyRocks(%this)
 	return true;	
 }
 
-//deprecated
 function map_generator::applyAi(%this)
 {
+	map_generator.spawnAi();
+	//below is deprecated
+	return true;
 	%c=missionCleanup.getCount();
+	%enemyname[0] = "goblin";
+	%enemyName[1] = "bandit";
+	%enemyName[2] = "Ogre";
+	%enemyname[3] = "Onyx";
+	%enemyNameCount = 4;
+	%enemyName[0,"rare"] = "Dragon";
+	%enemyName[1,"rare"] = "coyote";
+	%enemyName[2,"rare"] = "yeti";
+	%enemyNameCountRare = 3;
 	for(%i=0;%i<=%c;%i++)
 		if(isObject(%o=missioncleanup.getObject(%i)))
 		{
@@ -401,13 +479,24 @@ function map_generator::applyAi(%this)
 				%p = %o.position;
 				
 				if(getRandom(0,500) <= 40)
-				{
-					%amount = getRandom(0,4);
+				{	
+					//rare enemy
+					if(getRandom(0,500) <= 40)
+					{
+						%amount = getRandom(0,2);
+						%ai = %enemyName[getRandom(0,%enemyNameCountRare),"rare"];
+					}
+					else
+					{
+						%ai = %enemyName[getRandom(0,%enemyNameCount)];
+						%amount = getRandom(0,4);
+					}
+
 					for(%j=0;%j<%amount;%j++)
 					{
 						%placement = vectorAdd(%p,getRandom(10,-10) SPC getRandom(10,-10) SPC 1.5);
 						if(!%this.detectBrick(%placement))
-							%this.spawnAi(%placement);
+							%this.spawnAi(%placement,%ai);
 					}
 				}
 			}			
@@ -468,25 +557,46 @@ function map_generator::defineStartAndEndPoints(%this)
 	return true;
 }
 
+function survival_game_onEndBrickTouch()
+{
+	cancel($s_g_onendbricktouch);
+	
+	%c = clientgroup.getcount();
+	for(%i=0;%i<%c;%i++)
+	{
+		%o = clientgroup.getObject(%i);
+		if(!%o.dungeon)
+		{
+			continue;
+		}
+		if(isObject(%o.player))
+		{
+			if(vectorDist(%o.player.position,map_generator.endBrick.position) <= 8)
+			{
+				serverplay2d(onroundendsound);
+				survival_game_end();
+				messageAll('',"\c6" @ %o.name @ " has found the dungeon exit!");
+				//schedule(300,0,survival_game_newRound);
+				return false;
+			}
+		}
+	}
+	
+	$s_g_onendbricktouch = schedule(1000,0,survival_game_onEndBrickTouch);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function survival_game_end()
+{
+	for(%i=0;%i<clientgroup.getCount();%i++)
+	{
+		%o = clientGroup.getObject(%i);
+		if(%o.dungeon)
+		{
+			%o.dungeon = "";
+			%o.instantrespawn();
+		}
+	}
+	cancel($s_g_onendbricktouch);
+	map_generator.clearBricks();
+	
+}

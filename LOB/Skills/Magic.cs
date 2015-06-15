@@ -86,20 +86,23 @@ function gameConnection::dropFireBallto(%this,%pos)
 	%player = %this.player;
 	%x = getRandom(-5,5);
 	%y = getRandom(-5,5);
-	%z = getWord(%pos,2) + 20;
+	%z = 60;
 	
 	%z = %z + getRandom(0,15);
+	%add = vectorAdd(%pos, %x SPC %y SPC %z);
+
 	%p = new projectile()
 	{
 		dataBlock = fireBallProjectile;
 		//dataBlock = lob_firethrowprojectile;
 		initialVelocity = "0 0 -80";
-		initialPosition = vectorAdd(%pos, %x SPC %y SPC %z);
+		initialPosition = %add;
 		sourceObject = %player;
 		client = %this;
 		scale = "1 1 1";
 		isSpecial = true;
 	};
+
 }
 
 function fireBallOnHit(%client,%type,%col)
@@ -743,6 +746,59 @@ function windWallOnHit(%client,%type,%col)
 }
 
 //WIND WALL END
+
+//FROSTBITE
+function player::buildFrostBite(%this)
+{
+	%player = %this;
+	%EyeVector = %player.getEyeVector();
+	%EyePoint = %player.getEyePoint();
+	%Range = 1000;
+	%RangeScale = VectorScale(%EyeVector, %Range);
+	%RangeEnd = VectorAdd(%EyePoint, %RangeScale);
+	%raycast = containerRayCast(%eyePoint,%rangeEnd,$TypeMasks::all, %player);
+	
+	%o = getWord(%raycast,0);
+	
+	if(isObject(%o))
+	{
+			%position = getWords(%raycast,1,3);
+			%emitter = new particleEmitterNode()
+			{
+				dataBlock = "GenericEmitterNode";
+				emitter = "rainsplashwallemitter";
+				position = %position;
+				spherePlacement = 0;
+				velocity = 1;
+				scale = "8 8 1";
+				user = %this;
+				useEmitterColors=1;
+			};
+			
+			%emitter.setColor("0 0 1 1");
+			
+			
+			%emitter.schedule(3000,delete);
+			
+			%emitter2 = new particleEmitterNode()
+			{
+				dataBlock = "GenericEmitterNode";
+				emitter = "normcloudbeffectemitter";
+				position = %position;
+				spherePlacement = 0;
+				velocity = 5;
+				scale = "8 8 1";
+				user = %this;
+				useEmitterColors=1;
+			};
+			
+			%emitter2.setColor("0 0.1 1 1");
+			%emitter2.schedule(3000,delete);
+			
+	}
+}
+
+//FROSTBITE END
 
 package lob_magic
 {

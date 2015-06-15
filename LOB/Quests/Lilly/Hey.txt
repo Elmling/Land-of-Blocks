@@ -1,0 +1,3 @@
+#CON (client).lillytalk_0 #CONEND #DIA Hi, I need a horse. #DIAEND #ACT (client).lillyTalk_1 #ACTEND
+#CON (client).lillyTalk_1 (client).slo.inventory.itemcounthorse_0 #CONEND #DIA Hey you have one.. #DIAEND #ACT (client).lillyTalk_0 #ACTEND
+#REW null #REWEND

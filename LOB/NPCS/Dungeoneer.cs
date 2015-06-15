@@ -28,7 +28,7 @@ $task["Dungeoneer"] = "roam";
 $OnClickActionSet["Dungeoneer"] = "1";
 
 //roam range
-$roam["Dungeoneer"] = 5;
+$roam["Dungeoneer"] = 0;
 
 //item to be heald
 $equip["Dungeoneer"] = "adamantiteshortswordimage";
@@ -72,15 +72,88 @@ function Dungeoneer::onClick(%this,%ai,%player)
 	//%um1 = "#string I want to enter the dungeon. #command DungeoneerEnterDungeon";
 	//%um2 = "#string What can I get from the Dungeon? #command DungeoneerWhatCanIGet";
 	
-	%m = "I'm the Dungeoneer, the dungeon will be finished up soon, so be ready for it!";
+	//%m = "I'm the Dungeoneer, the dungeon will be finished up soon, so be ready for it!";
 	
-	%um1 = "#string I can't wait! #command";
+	//%um1 = "#string I can't wait! #command";
+	%m = "Hello " @ %name @ ", would you like to enter the dungeon?";
+	%um1 = "#string Yes, teleport me. #command dungeoneerGoToDungeon";
+	%um2 = "#string Yes, let me equip my weapons first. #command DungeoneerOpenInventory";
 		
 	commandToClient(%client,'setdlg',%head,%m,%um1,%um2);
 }
 
 if(!isObject(dungeonDeploreObject))
 	new simset(dungeonDeploreObject);
+
+function serverCmdDungeoneerOpenInventory(%this)
+{
+	commandToClient(%this,'openInventory');
+}
+
+function serverCmdDungeoneerGoToDungeon(%this)
+{
+	%name = %this.name;
+	%head = "Dialogue with Dungeoneer";
+	%time = getSimTime();
+	if((map_generator.startbrick $= "" || !isObject(map_Generator.startbrick)))
+	{
+		if(!isObject(map_generator.startBrick()))
+		{
+			if(%time - map_generator.attempt <= 5000)
+			{
+				%m = "" @ %name @ ", the dungeon is loading.";
+				%um1 = "#string Let me equip my weapons then. #command DungeoneerOpenInventory";
+				commandToClient(%this,'setdlg',%head,%m,%um1,%um2);			
+				return false;
+			}
+			else
+			{
+				map_generator.attempt = %time;
+				%m = "" @ %name @ ", the dungeon is being created, it will be ready in a few seconds.";
+				%um1 = "#string Let me equip my weapons then. #command DungeoneerOpenInventory";
+				commandToClient(%this,'setdlg',%head,%m,%um1,%um2);
+			}
+			map_generator.attempt = %time;
+		}
+	}
+	if(%this.lookingat.name !$= "Dungeoneer")
+		return false;
+	if(%this.dungeon $= "1")
+	{
+		messageClient(%this,'',"\c6You are already in the dungeon. Type /leaveDungeon to leave the dungeon!");
+		return false;
+	}
+
+	if(isObject(map_generator.startBrick))
+	{
+		addClientToDungeon(%this);
+		commandToClient(%this,'CloseDialogue');
+	}
+	else
+	{
+		map_generator.generate("0 0 1000");
+		survival_game_onEndBrickTouch();
+		//schedule(5000,0,addclientToDungeon,%this);
+	}
+	
+}
+
+function addClientToDungeon(%this)
+{
+	%this.dungeon = true;
+	%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
+	messageClient(%this,'',"\c6Type /leaveDungeon to leave the dungeon!");
+	messageAll('',"\c6" @ %this.name @ " has entered the dungeon!");
+}
+
+function serverCmdLeaveDungeon(%this)
+{
+	if(%this.dungeon)
+	{
+		%this.dungeon = "";
+		%this.instantrespawn();
+	}
+}
 
 function serverCmdDungeoneerEnterDungeon(%this)
 {

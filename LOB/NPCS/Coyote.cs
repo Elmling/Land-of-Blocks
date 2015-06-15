@@ -73,9 +73,41 @@ function Coyote::onObjectSpawned(%this,%Coyote)
 	//the default dog script causes the name to be set wrong
 	//so we have a ghetto fix here
 	%coyote.schedule(200,setCoyote);
+	%this.coyoteRoam();
 }
 
 function aiPlayer::setCoyote(%this)
 {
 	%this.name = "Coyote";
 }
+
+function aiPlayer::coyoteRoam(%this)
+{
+	cancel(%this.roamloop);
+	
+	
+	
+	%this.roamLoop = %this.schedule(1000,coyoteRoam);	
+}
+
+function aiPlayer::canWalkTo(%this,%position)
+{
+	%position = %player.position;
+	InitContainerRadiusSearch(%position,0.25,$TypeMasks::all);
+	while((%targetObject=containerSearchNext()) !$= 0)
+	{
+		return false;
+	}
+	
+	%eye = %this.getEyePoint();
+	%EyeVector = %this.player.getEyeVector();
+	%EyePoint = %this.player.getEyePoint();
+	%Range = 100;
+	%RangeScale = VectorScale(%EyeVector, %Range);
+	%RangeEnd = VectorAdd(%EyePoint, %RangeScale);
+	%raycast = containerRayCast(%eyePoint,%rangeEnd,$TypeMasks::FxBrickObjectType | $TypeMasks::FxBrickAlwaysObjectType | $TypeMasks::PlayerObjectType , %this.player);
+	%o = getWord(%raycast,0);
+	
+	return true;
+}
+

@@ -1,0 +1,4 @@
+#CON (client).test1_0 #CONEND #DIA Well well well #DIAEND #ACT (client).test1_1 #ACTEND
+#CON (client).test5_0 #CONEND #DIA You finished the quest, gratz 100 gold for you. #DIAEND #ACT (client).reward() (client).test5_1 #ACTEND
+#CON (client).test5_1 #CONEND #DIA You've already done this quest. #DIAEND #ACT (client).test5_1 #ACTEND
+#REW (client).slo.temphealth=1; messageclient((client),'',"yesss"); #REWEND

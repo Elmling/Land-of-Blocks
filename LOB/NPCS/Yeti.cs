@@ -27,3 +27,17 @@ $materialDropChance["Yeti"] = 7;
 $drop["Yeti","food"] = "Raw lobster";
 $foodDropChance["Yeti"] = 2;
 $lob::vision["Yeti"] = 20;
+
+if(isObject(Yeti))Yeti.delete();
+
+new scriptObject(Yeti)
+{
+		class="Yeti";
+};
+
+function Yeti::onObjectSpawned(%this,%Yeti)
+{
+	%Yeti.setScale("2 2 1.5");
+	%Yeti.setmovespeed("0.2");
+	%Yeti.removeTreeCollisionLoop();
+}

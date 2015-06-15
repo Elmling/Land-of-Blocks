@@ -1,0 +1,15 @@
+1.everyone is on the same team, work together to survive.
+2.random places to cook food which heals you.
+3.rewards for players cooperating (ex:cooking food and giving to another player rewards cash)
+4.everything is randomly generated
+5.on wave clear set new round, randomly generated
+6.utilize slayer?
+7.save system
+8.level up system using numpad keys with a bottomprint displaying either attack, health, and speed (ex:skill points)
+9.npc sounds
+10.ambient sounds depending on terrain generation type.
+11.combat and exp system
+12.give system, click player > "press numpad # key to give player \inventorylist"
+	<>\c6someone gave you a(n)" inventoryitem
+13.animations
+

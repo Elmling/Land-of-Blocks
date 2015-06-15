@@ -1,0 +1,2 @@
+#CON (client).slo.trainerhasInfo_0 #CONEND #DIA So let me tell you something.. #DIAEND #ACT (client).slo.trainerhasInfo_1 #ACTEND
+#CON (client).slo.Trainerhasinfo_1 #CONEND #DIA I have nothing for you #DIAEND #ACT (client).slo.trainerquest0_1 #ACTEND
