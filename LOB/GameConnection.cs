@@ -24,9 +24,9 @@ package gameConnection
 			%time = getSimTime();
 			%amt = %time - %client.lastSpecialTime;
 			
-			if(%client.bowSling && %amt <= 15000)
+			if(%client.bowSling && %amt <= 3000)
 			{
-				%m = setKeyWords("\c6You have to wait " @ mfloor(((15000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((15000 - %amt) / 1000)) SPC "special","\c6");
+				%m = setKeyWords("\c6You have to wait " @ mfloor(((3000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((3000 - %amt) / 1000)) SPC "special","\c6");
 				smartMessage(%client,%m,5000);
 				return 0;
 			}
@@ -39,7 +39,7 @@ package gameConnection
 			if(strStr(strLwr(%name),"fire") >= 0)
 			{
 				%time = getSimTime();
-				if(%time - %player.client.lastSpecialTime >= 15000)
+				if(%time - %player.client.lastSpecialTime >= 3000)
 				{
 					%player.client.doFireBallSpecial();
 					//serverPlay3d(swordSpecialSound,%client.player.position);
@@ -48,7 +48,7 @@ package gameConnection
 				}
 				else
 				{
-					%m = setKeyWords("\c6You have to wait " @ mfloor(((15000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((15000 - %amt) / 1000)) SPC "special","\c6");
+					%m = setKeyWords("\c6You have to wait " @ mfloor(((3000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((3000 - %amt) / 1000)) SPC "special","\c6");
 					smartMessage(%client,%m,5000);
 				}			
 			}
@@ -56,16 +56,16 @@ package gameConnection
 			if(strStr(strLwr(%name),"shortsword") >= 0)
 			{
 				%time = getSimTime();
-				if(%time - %player.client.lastSpecialTime >= 15000)
+				if(%time - %player.client.lastSpecialTime >= 3000)
 				{
 					lob_sword_doSpecial(%name,%client.player);
 					serverPlay3d(swordSpecialSound,%client.player.position);
 					%client.player.emote(swordSpecialImage,1);
 					%client.lastSpecialTime = %time;
 				}
-				else
+				else	
 				{
-					%m = setKeyWords("\c6You have to wait " @ mfloor(((15000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((15000 - %amt) / 1000)) SPC "special","\c6");
+					%m = setKeyWords("\c6You have to wait " @ mfloor(((3000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((3000 - %amt) / 1000)) SPC "special","\c6");
 					smartMessage(%client,%m,5000);
 				}
 			}

@@ -19,8 +19,6 @@ package Spawning
 				return false;
 				
 			addToList("$LOB::spawn["@%area@"]",%brick);
-				
-			echo("Brick spawn has been added to the group.");
 		}
 
 		if(getWord(%bn,0) $= "Item")

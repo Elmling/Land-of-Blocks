@@ -1,23 +1,3 @@
-function lob_npcremovetreecollision()
-{
-		cancel($lob::nrtc);
-		%c = getWordCount($Lob::enemySpawn["all"]);
-		for(%i=0;%i<c;%i++)
-		{
-			%o = getField($lob::enemySpawn["all"],%i);
-			
-			%position=%o..position;
-			
-			InitContainerRadiusSearch(%position,15,$TypeMasks::PlayerObjectType);
-			$LocalMsgString='%1 says, \c5\"%2\"';
-			while((%targetObject=containerSearchNext()) !$= 0)
-			{
-			%client=%targetObject.client;
-			messageClient(%client,'',$LocalMsgString,%client.name,%msg);
-		}
-		$lob::nrtc = schedule(1000,0,lob_npcremovetreecollision);
-}
-
 package NPC
 {
 	function paintProjectile::onCollision(%a,%b,%c,%d,%e)

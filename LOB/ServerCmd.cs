@@ -1006,10 +1006,7 @@ function serverCmdDash(%this,%type)
 	if(%type $= "forward")
 	{
 		%currvel = getWord(%player.getVelocity(),2);
-		if(mFloor(%currVel) $= "0")
-			%scale = 16;
-		else
-			%scale = 11;
+		%scale = 16;
 		%vel = vectorScale(%vel,%scale);
 		%vel = vectorScale(%player.getforwardVector(),%scale);
 		%player.setVelocity(vectorAdd(%vel,"0 0 2"));
@@ -1020,10 +1017,7 @@ function serverCmdDash(%this,%type)
 	if(%type $= "backward")
 	{
 		%currvel = getWord(%player.getVelocity(),2);
-		if(mFloor(%currVel) $= "0")
-			%scale = -16;
-		else
-			%scale = -11;
+		%scale = -16;
 		%vel = vectorScale(%vel,%scale);
 		%vel = vectorScale(%player.getforwardVector(),%scale);
 		%player.setVelocity(vectorAdd(%vel,"0 0 2"));
@@ -1035,10 +1029,7 @@ function serverCmdDash(%this,%type)
 	{
 		%vel = vectorCross(%player.getForwardVector(),"0 0 1");
 		%currvel = getWord(%player.getVelocity(),2);
-		if(mFloor(%currVel) $= "0")
-			%scale = -16;
-		else
-			%scale = -11;
+		%scale = -16;
 		%vel = vectorScale(%vel,%scale);
 		%player.setVelocity(vectorAdd(%vel,"0 0 2"));
 	}
@@ -1047,10 +1038,7 @@ function serverCmdDash(%this,%type)
 	{
 		%vel = vectorCross(%player.getForwardVector(),"0 0 1");
 		%currvel = getWord(%player.getVelocity(),2);
-		if(mFloor(%currVel) $= "0")
-			%scale = 16;
-		else
-			%scale = 11;
+		%scale = 16;
 		%vel = vectorScale(%vel,%scale);
 		%player.setVelocity(vectorAdd(%vel,"0 0 2"));	
 	}
