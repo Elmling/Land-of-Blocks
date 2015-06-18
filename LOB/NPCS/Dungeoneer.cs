@@ -141,7 +141,11 @@ function serverCmdDungeoneerGoToDungeon(%this)
 function addClientToDungeon(%this)
 {
 	%this.dungeon = true;
-	%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
+	if(isObject(%this.horse))
+		if(%this.horse.getMountedObject(0).client == %this)
+			%this.horse.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
+		else
+			%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
 	messageClient(%this,'',"\c6Type /leaveDungeon to leave the dungeon!");
 	messageAll('',"\c6" @ %this.name @ " has entered the dungeon!");
 }
