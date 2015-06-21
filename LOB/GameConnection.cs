@@ -23,7 +23,20 @@ package gameConnection
 				
 			%time = getSimTime();
 			%amt = %time - %client.lastSpecialTime;
-			
+			//will change this to be bronze dagger, iron dagger, etc
+			if(%name $= "DaggerImage")
+			{
+				%vel = vectorScale(%player.getEyeVector(),-20);
+				%player.setVelocity(%vel);
+				%player.schedule(200,setVelocity,"0 0 25");
+				%vel = vectorScale(%player.getEyeVector(),20);
+				%vel = vectorAdd(%vel,"0 0 -20");
+				%player.schedule(700,playthread,0,crouch);
+				%player.schedule(700,setVelocity,%vel);
+				%player.schedule(1000,playthread,0,root);
+				%player.schedule(1000,doDaggerSpecial);
+			}
+			else
 			if(%client.bowSling && %amt <= 3000)
 			{
 				%m = setKeyWords("\c6You have to wait " @ mfloor(((3000 - %amt) / 1000)) @ " seconds to use your special again.",mfloor(((3000 - %amt) / 1000)) SPC "special","\c6");
@@ -100,6 +113,18 @@ package gameConnection
 };
 
 activatePackage(gameConnection);
+
+function player::doDaggerSpecial(%this)
+{
+	%position=%this.position;
+	InitContainerRadiusSearch(%position,25,$TypeMasks::PlayerObjectType);
+	while((%o=containerSearchNext()) !$= 0)
+	{
+		if(%o==%this)continue;
+		
+		%o.setVelocity("0 0 20");
+	}
+}
 
 function gameConnection::beginTips(%this)
 {

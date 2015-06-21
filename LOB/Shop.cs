@@ -1,8 +1,7 @@
-function aiPlayer::lob_newShop(%this)
+function aiPlayer::lob_newShop(%this,%type)
 {
 	if(%this.hasShop)
 	{
-		
 		return false;
 	}
 	
@@ -12,7 +11,7 @@ function aiPlayer::lob_newShop(%this)
 		npc = %this;
 	};
 	
-	%this.shop.initialize();
+	%this.shop.initialize(%type);
 }
 
 function aiPlayer::lob_deleteShop(%this)
@@ -22,6 +21,22 @@ function aiPlayer::lob_deleteShop(%this)
 		%this.hasShop = "";
 		%this.shop.delete();
 		%this.shop = "";
+	}
+}
+
+function lobShop::initialize(%this,%type)
+{
+	if(%type $= "dungeoneer")
+	{
+		%this.itemCount["bronzeBow"] = getRandom(1,4);
+	}
+	else
+	{
+		%this.itemCount["bronzeBow"] = getRandom(1,4);
+		%this.itemCount["bronzeShortSword"] = getRandom(5,20);
+		%this.itemCount["bronzeAxe"] = getRandom(10,40);
+		%this.itemCount["bronzePickAxe"] = getRandom(10,40);
+		%this.itemCount["bronzeJavlin"] = getRandom(1,4);
 	}
 }
 
@@ -270,15 +285,6 @@ function lobShop::clientSell(%this,%client,%item,%amount)
 		commandToClient(%client,'closeShopWindow');
 		commandToClient(%client,'openshopwindow');
 	}	
-}
-
-function lobShop::initialize(%this)
-{
-	%this.itemCount["bronzeBow"] = getRandom(1,4);
-	%this.itemCount["bronzeShortSword"] = getRandom(5,20);
-	%this.itemCount["bronzeAxe"] = getRandom(10,40);
-	%this.itemCount["bronzePickAxe"] = getRandom(10,40);
-	%this.itemCount["bronzeJavlin"] = getRandom(1,4);
 }
 
 function serverCmdPopulateShop(%this)

@@ -38,12 +38,6 @@ package Spawning
 		//	%this.player.schedule(50,delete);
 		//	return true;
 		}
-		
-		if(isObject(%this.dungeon) && !%this.canSpawn)
-		{
-			messageClient(%this,'',"\c6You have to wait for the next wave to spawn.");
-			return false;
-		}
 	
 		parent::spawnPlayer(%this);
 		
@@ -94,7 +88,7 @@ package Spawning
 		%font = "<font:Gabriola:100>";
 		commandToClient(%this,'centerprint',%font @ capFirstLetter(%m),3);	
 
-		if((%this.name !$= "Elm") && (!%this.buildMode))
+		if((!%this.buildMode))
 			%this.player.changeDataBlock(playerNoJet);
 
 		if(%this.customAvatar !$= "")
@@ -149,6 +143,11 @@ package Spawning
 		
 		if(%this.slo.customScale !$= "")
 			%this.player.setScale(%this.slo.scalex SPC %this.slo.scaley SPC %this.slo.scaleZ);
+		
+		if(%this.dungeon)
+		{
+			%this.player.setTransform(vectorAdd(map_Generator.startBrick.position,"0" SPC "0" SPC "1.5"));
+		}
 		
 		//somehowloadtools();
 	}

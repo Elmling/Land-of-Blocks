@@ -81,7 +81,7 @@ package NPC
 			else
 			if(%o.getClassName() $= "AiPlayer")
 			{
-				if(%o.hasShop || isObject(%o.shop))
+				if((%o.hasShop || isObject(%o.shop)) && %o.name !$= "Dungeoneer")
 				{
 					%client.shopKeep = %o;
 					commandToClient(%client,'openShopWindow');
@@ -866,7 +866,6 @@ function aiPlayer::combat(%this)
 					else
 					if(%this.name $= "Coyote")
 					{
-						talk("in coyote");
 						%this.playThread(0,"activate");
 						%dmg = getDamage(%this,%enemy);
 					}

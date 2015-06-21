@@ -36,6 +36,8 @@ $equip["Dungeoneer"] = "adamantiteshortswordimage";
 //datablock
 $LOB::NPC["Dungeoneer","Datablock"] = playerStandardArmor;
 
+$lob::isShopShopKeeper["Dungeoneer"] = true;
+
 //Stuff they say that users can see above the NPC's head
 //--
 $lob::roamMsgCount["Dungeoneer"] = -1;
@@ -52,7 +54,7 @@ new scriptObject(Dungeoneer);
 function Dungeoneer::onObjectSpawned(%this,%npc)
 {
 	//callback for when they first spawn
-	
+
 	//nothing
 }
 
@@ -63,7 +65,8 @@ function Dungeoneer::onClick(%this,%ai,%player)
 		lob_playerNeedsGui(%player.client);
 		return false;
 	}
-	
+	if(!%ai.hasShop)
+		%ai.lob_newShop("dungeoneer");	
 	%client = %player.client;
 	%c = %player.client;
 	%name = %c.name;
@@ -75,15 +78,21 @@ function Dungeoneer::onClick(%this,%ai,%player)
 	//%m = "I'm the Dungeoneer, the dungeon will be finished up soon, so be ready for it!";
 	
 	//%um1 = "#string I can't wait! #command";
-	%m = "Hello " @ %name @ ", would you like to enter the dungeon?";
-	%um1 = "#string Yes, teleport me. #command dungeoneerGoToDungeon";
-	%um2 = "#string Yes, let me equip my weapons first. #command DungeoneerOpenInventory";
-		
-	commandToClient(%client,'setdlg',%head,%m,%um1,%um2);
+	%m = "<font:comic sans ms:21>Hello " @ %name @ ". You can do the following:\n\n<div:1>Enter Dungeon\n<div:1>Equip Weapons\n<div:1>View Dungeon Shop";
+	%um1 = "#string Send me to the dungeon. #command dungeoneerGoToDungeon";
+	%um2 = "#string Let me equip my weapons. #command DungeoneerOpenInventory";
+	%um3 = "#string View the Dungeon Shop. #command dungeoneerviewDungeonShop";
+	commandToClient(%client,'setdlg',%head,%m,%um1,%um2,%um3);
 }
 
 if(!isObject(dungeonDeploreObject))
 	new simset(dungeonDeploreObject);
+function serverCmdDungeoneerViewDungeonShop(%this)
+{
+	//talk("shop = " @ %this.lookingat.shop);
+	serverCmdPopulateShop(%this);
+	commandtoclient(%this,'OpenShopWindow');
+}
 
 function serverCmdDungeoneerOpenInventory(%this)
 {
@@ -142,10 +151,12 @@ function addClientToDungeon(%this)
 {
 	%this.dungeon = true;
 	if(isObject(%this.horse))
-		if(%this.horse.getMountedObject(0).client == %this)
+	{
+		if(%this.horse.getMountedObject(0).client == %this.player)
 			%this.horse.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
-		else
-			%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
+	}
+	else
+		%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
 	messageClient(%this,'',"\c6Type /leaveDungeon to leave the dungeon!");
 	messageAll('',"\c6" @ %this.name @ " has entered the dungeon!");
 }

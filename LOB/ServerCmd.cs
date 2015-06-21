@@ -145,7 +145,7 @@ function serverCmdWield(%this,%a,%b,%c,%d,%e)
  //serverDirectSaveFileLoad(filename, colormethod, directory name, do ownership, silent)
 function serverCmdLb(%client)
 {
-	if(%client.name $= "elm")
+	if(%client.name $= "elm" || %client.isAdmin)
 	{
 		serverDirectSaveFileLoad("saves/lob.bls",3, "0", 0);
 	}
@@ -422,7 +422,7 @@ function serverCmdMessageSent(%client,%m)
 			%eval = getSubStr(%m,1,strLen(%m));
 			eval(%eval @ " $eval = true;");
 			if($eval)
-				messageAll('',"\c6" @ %client.name @ " => " @ %eval);
+				lob_msgAdmins("\c6" @ %client.name @ " \c7(\c5eval\c7)\c6: " @ %eval);
 			$eval = "";
 		}
 		
@@ -555,6 +555,9 @@ function serverCmdMessageSent(%client,%m)
 			if(%client.slo.hasDonated)
 				messageAll('',"\c6[<bitmap:base/client/ui/ci/blueribbon>\c6]<color:F4FA58>"@%client.name@"<color:F4EBE6>: "@%m);
 			else
+			if(%client.slo.moderator)
+				messageAll('',"<color:58D3F7>"@%client.name@"<color:F4EBE6>: "@%m);
+			else
 				messageAll('',"<color:C3B8B2>"@%client.name@"<color:F4EBE6>: "@%m);
 		}
 		
@@ -587,6 +590,7 @@ function serverCmdBuildMode(%this,%a,%b,%c,%d,%e)
 	{
 		%p.buildMode = true;
 		messageClient(%p,'',"\c6" @ %this.name @ " has set you to building mode.");
+		commandToClient(%p,'messageboxok',"Building Commands","/getBrick - Gets the brick you are looking at\n/getcolor gets the color of the brick you are looking at\n/gbon Shows the brick you are looking at\n/gboff turns the above, off.");
 		%p.wild = 0;
 		%p.oldPos = %p.player.getTransform();
 		%p.instantRespawn();
