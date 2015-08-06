@@ -133,7 +133,7 @@ function map_generator::createWallBrick(%this,%position)
 		client = findlocalClient();
 		colorFxId = "0";
 		//truenos colorset id
-		colorId = "37";
+		colorId = "51";
 		dataBlock = "brick32xCubeData";
 		isBasePlate = true;
 		isPlanted = "1";
@@ -179,7 +179,7 @@ function map_generator::createFloorBrick(%this,%position)
 		//FIX THISSSSSSSS
 		client = findlocalClient();
 		colorFxId = "0";
-		colorId = "32";
+		colorId = "59";
 		dataBlock = "brick32x32fData";
 		isBasePlate = true;
 		isPlanted = "1";
@@ -207,6 +207,41 @@ function map_generator::createFloorBrick(%this,%position)
 		%this.brickForAi = %b;	
 		%b.setName("_enemyName");
 	}
+}
+
+function map_generator::createCeilingBrick(%this,%position)
+{
+	%b = new fxdtsBrick()
+	{
+		//Default
+		angleID = "0";
+		//FIX THISSSSSSSS
+		client = findlocalClient();
+		colorFxId = "0";
+		colorId = "52";
+		dataBlock = "brick32x32fData";
+		isBasePlate = true;
+		isPlanted = "1";
+		position = %position;
+		printId = "0";
+		rotation = "1 1 1";
+		shapeFxId = "0";
+		stackBL_ID = "0";
+		//Survival
+		//isFloorBrick = true;
+		isCeilingBrick = true;
+		map_generator = map_generator;
+		map_generator_step = map_generator.chooseStep();
+	};
+	//map_Generator.dungeonBrick = %b;
+	$map_generator::plantArea::pos[%position] = true;
+	
+	%b.plant();
+	%b.isPlanted=1;
+	%b.setTrusted(1);
+	brickGroup_35295.add(%b);
+	
+	missionCleanup.add(%b);	
 }
 
 function map_generator::createTreeBrick(%this,%position)
@@ -293,6 +328,8 @@ function map_generator::createRockBrick(%this,%position)
 function map_generator::setDynamicGeneratorTimer(%this)
 {
 	%this.timer = 2000 + (clientgroup.getCount() * 600);
+	if(%this.timer > 6000)
+		%this.timer = 6000;
 }
 
 map_generator.timer = 2000;
@@ -318,7 +355,7 @@ function map_generator::generate(%this,%position,%step)
 	
 	if(%step $= "")
 	{
-		commandtoAll('centerPrint',"\c6Generation timer: \c2" @ map_generator.timer,7);
+		//commandtoAll('centerPrint',"\c6Generation timer: \c2" @ map_generator.timer,7);
 		map_generator.timestart = %time;
 		%step = %this.chooseStep();
 	}
@@ -348,6 +385,7 @@ function map_generator::generate(%this,%position,%step)
 		return false;
 	}
 	%b = %this.createFloorBrick(%position);
+	%b2 = %this.createCeilingBrick(vectorAdd(%position,"0 0 30"));
 	%this.stepCount[%b.map_generator_step]++;
 	
 	eval("%position = map_generator.get" @ %step @ "step(%position);");
@@ -362,7 +400,7 @@ function map_generator::clearBricks(%this)
 		if(isObject(%o=missioncleanup.getObject(%i)))
 		{
 			if(%o.isfloorbrick || %o.isWallBrick || %o.istreebrick || %o.isRockBrick
-			|| %o.isSurvivalAi)
+			|| %o.isSurvivalAi || %o.isCeilingBrick)
 			{
 				%o.delete();
 			}

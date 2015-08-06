@@ -305,6 +305,9 @@ function serverCmddoRealFastDrop(%this,%a,%b,%c,%d,%e)
 	if(%this.slo.inventory.itemCount[%itemSquish] < %amt)
 		%amt = %this.slo.inventory.itemCount[%itemSquish];
 
+	if($lob::itemDisableDrop[%itemSquish] $= "1")
+		return false;
+	
 	if($lob::itemDatablock[%itemSquish] $= "")
 	{
 		echo("LOB does not have a datablock for item " @ %itemSquish);
@@ -363,6 +366,9 @@ function serverCmdDrop(%this,%a,%b,%c,%d,%e)
 	if(%this.slo.inventory.itemCount[%itemSquish] < %amt)
 		%amt = %this.slo.inventory.itemCount[%itemSquish];
 
+	if($lob::itemDisableDrop[%itemSquish] $= "1")
+		return false;
+	
 	if($lob::itemDatablock[%itemSquish] $= "")
 	{
 		echo("LOB does not have a datablock for item " @ %itemSquish);
@@ -1126,6 +1132,7 @@ $lob::itemInfo["Lobster"] = "When Lobster is cooked and ingested, it heals you f
 $lob::itemInfo["Wall"] = "The Wind Wall spell does damage for 5 seconds in a radius wall and is on a 7 second cooldown. This spell requires 2 Magic Material.";
 $Lob::itemInfo["Ball"] = "The Fire Ball spell shoots a fire ball to do damage. Right clicking will cause a cluster of Fire Balls to fall from the sky doing radius damage. This Spell Requires 1 Magic Material.";
 $Lob::itemInfo["Material"] = "Used to cast magic spells in Land of Blocks.";
+$lob::itemInfo["coin"] = "Used to purchase special items from the Dungeoneer.";
 
 function serverCmdGetItemInfo(%client,%item)
 {

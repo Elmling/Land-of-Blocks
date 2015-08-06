@@ -39,6 +39,9 @@ package lob_horseSupport
 						else
 						if(%col.lastMount !$= %obj.client)
 						{
+							commandtoclient(%obj.client,'messageboxok',"This isn't your horse.","To steal a horse, click the horse. If you choose to steal it, you'll become instantly wanted!");
+							%obj.schedule(10,dismount,1);
+							return parent::onMount(%this,%obj,%col,%a,%b);
 							%obj.client.slo.pkPoints += 10;
 							%m = setKeyWords("\c6"@ %obj.client.name @ " has stolen " @ %col.owner.name @ "\'s Horse.",%obj.client.name SPC %col.owner.name, "\c6");
 							messageAll('',%m);
@@ -111,6 +114,7 @@ function gameConnection::spawnHorse(%this)
 		position = %this.player.position;
 		isHorse = true;
 		level = 1;
+		name = "Horse";
 	};
 }
 

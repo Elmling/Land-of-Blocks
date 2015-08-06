@@ -152,8 +152,10 @@ function addClientToDungeon(%this)
 	%this.dungeon = true;
 	if(isObject(%this.horse))
 	{
-		if(%this.horse.getMountedObject(0).client == %this.player)
+		if(%this.horse.getMountedObject(0) == %this.player)
 			%this.horse.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
+		else
+			%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));
 	}
 	else
 		%this.player.setTransform(vectorAdd(map_generator.startbrick.position,"0 0 1.5"));

@@ -96,6 +96,7 @@ function lob_RegisterItemsToClient()
 		commandToClient(%client,'lobRegisterItemVariable',"InterpassScroll","Interpass scroll");
 		commandToClient(%client,'lobRegisterItemVariable',"AlyswellScroll","Alyswell Scroll");
 		commandToClient(%client,'lobRegisterItemVariable',"EldriaScroll","Eldria Scroll");
+		commandToClient(%client,'lobRegisterItemVariable',"DungeonCoin","Dungeon Coin");
 	}
 }
 

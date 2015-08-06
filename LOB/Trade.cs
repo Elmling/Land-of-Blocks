@@ -160,6 +160,11 @@ function serverCmdInTradeAddItem(%client,%item)
 		%item = strReplace(%item,"()","");
 		%item = trim(%item);
 		%itemCheck = $lob::itemDatablock[convertToItemName(%item)];
+		if($lob::itemDisableTrade[convertToItemName(%item)] $= "1")
+		{
+			commandToClient(%client,'messageBoxOk',"Error","Dungeon Coins are untradeable!");
+			return false;
+		}
 		
 		//messageClient(findclientbyname("elm"),'',"\c6item = " @ %item @" | item datablock = " @ %itemcheck);
 

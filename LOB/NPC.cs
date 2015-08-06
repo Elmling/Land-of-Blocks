@@ -1062,8 +1062,7 @@ function aiPlayer::doJump(%this)
 			%jumpForce = 13;
 		else
 			%jumpForce = %this.jumpForce;
-		if(%this.name $= "Dragon")
-			echo("jf = " @ %jumpForce);
+
 		%this.addVelocity("0 0 " @ %jumpForce);
 	}
 }

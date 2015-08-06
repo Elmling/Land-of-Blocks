@@ -24,7 +24,7 @@ $task["Horse"] = "roam";
 //$taskInner["Horse"] = "iron";
 
 //if we click the npc, are they ready for dialogue?
-$OnClickActionSet["Horse"] = "0";
+$OnClickActionSet["Horse"] = "1";
 
 //roam range
 $roam["Horse"] = 0;
@@ -61,5 +61,17 @@ function Horse::onClick(%this,%ai,%player)
 {
 	%client = %player.client;
 	%slo = %client.slo;
-	
+	if(isObject(%ai.owner) && %ai.owner != %client)
+	{
+		if(!isObject(%ai.getMountedObject(0)))
+			if(%ai.lastMount !$= %client)
+			{
+				%client.slo.pkPoints += 10;
+				%m = setKeyWords("\c6"@ %client.name @ " has stolen " @ %ai.owner.name @ "\'s Horse.",%client.name SPC %ai.owner.name, "\c6");
+				messageAll('',%m);
+				%ai.lastMount = %client;
+				%ai.mountObject(%player,2);
+				%player.setControlObject(%ai);
+			}
+	}
 }

@@ -240,6 +240,11 @@ $lob::itemCorrectName["CookedLobster"] = "Cooked Lobster";
 $lob::itemDatablock["Horse"] = advancedHorseArmor;
 $lob::itemCorrectName["Horse"] = "Horse";
 
+//dungeon
+$lob::itemDatablock["dungeonCoin"] = goldItem;
+$lob::itemCorrectName["dungeonCoin"] = "Dungeon Coin";
+$lob::itemDisableDrop["DungeonCoin"] = true;
+$lob::itemDisableTrade["dungeonCoin"] = true;
 
 function gameConnection::addToInventory(%this,%item,%amount)
 {
